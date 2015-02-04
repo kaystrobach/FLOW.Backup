@@ -5,12 +5,15 @@ This tool allows you to backup the most important files in your FLOW installatio
 
 Currently the Backup includes:
 
-* Configuration Directory
-* Database dump (MySQL)
-* composer.json and composer.lock
+* Create a Database dump (MySQL)
+* Copy the composer.json and composer.lock files
+* Copy the Data/Configuration Directory
+* Copy the Data/Persistent Directory
+
+Additionally it's possible to keep some of the backup and restore the one you like directly from the commandline.
 
 Planned features:
-* Copy the Persistent Directory
+
 * Compress the Backup after generation
 
 ```

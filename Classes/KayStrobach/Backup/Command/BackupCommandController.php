@@ -69,6 +69,8 @@ class BackupCommandController extends CommandController {
 		if($database) {
 			Files::createDirectoryRecursively($this->backupFolder . 'Database');
 			$this->emitCreateDbBackup($this->backupFolder . 'Database/');
+			Files::createDirectoryRecursively($this->backupFolder . 'Data/Persistent');
+			Files::copyDirectoryRecursively(FLOW_PATH_DATA . 'Persistent/', $this->backupFolder . 'Data/Persistent/');
 		}
 		$this->emitBeforeCompression($this->backupFolder);
 	}
@@ -90,10 +92,11 @@ class BackupCommandController extends CommandController {
 		}
 		if($database) {
 			$this->emitRestoreDbBackup($this->backupFolder . 'Database/');
+			Files::removeDirectoryRecursively(FLOW_PATH_DATA . 'Persistent/');
+			Files::copyDirectoryRecursively($this->backupFolder . 'Data/Persistent/', FLOW_PATH_DATA . 'Persistent/');
 		}
 		if($settings && is_dir($this->backupFolder . 'Configuration')) {
 			Files::removeDirectoryRecursively(FLOW_PATH_CONFIGURATION);
-			Files::createDirectoryRecursively(FLOW_PATH_CONFIGURATION);
 			Files::copyDirectoryRecursively($this->backupFolder . 'Configuration/', FLOW_PATH_CONFIGURATION);
 		}
 		if($composer) {
@@ -112,12 +115,21 @@ class BackupCommandController extends CommandController {
 	public function listCommand() {
 		$this->outputLine('Available Backups');
 		$this->setBackupFolder('');
-		$folders = scandir($this->backupFolder);
+		$folders = $this->getAvailableBackups();
+		foreach($folders as $folder) {
+			$this->outputLine(' - ' . $folder);
+		}
+	}
+
+	protected function getAvailableBackups() {
+		$foundBackups = array();
+		$folders = scandir(FLOW_PATH_DATA . 'Backups/');
 		foreach($folders as $folder) {
 			if(($folder !== '.') && ($folder !== '..') && (is_dir($this->backupFolder . $folder))) {
-				$this->outputLine(' - ' . $folder);
+				$foundBackups = $folder;
 			}
 		}
+		return $foundBackups;
 	}
 
 	/**
