@@ -47,9 +47,10 @@ class BackupCommandController extends CommandController {
 	 * @param bool $database
 	 * @param bool $settings
 	 * @param bool $composer
+	 * @param string $preset
 	 * @throws \TYPO3\Flow\Utility\Exception
 	 */
-	public function createCommand($database = TRUE, $settings = TRUE, $composer = TRUE) {
+	public function createCommand($database = TRUE, $settings = TRUE, $composer = TRUE, $preset = 'default') {
 		$this->setBackupFolder();
 		Files::createDirectoryRecursively($this->backupFolder);
 		if($composer) {
@@ -68,9 +69,9 @@ class BackupCommandController extends CommandController {
 		}
 		if($database) {
 			Files::createDirectoryRecursively($this->backupFolder . 'Database');
-			$this->emitCreateDbBackup($this->backupFolder . 'Database/');
+			$this->emitCreateDbBackup($this->backupFolder . 'Database/', $preset);
 		}
-		$this->emitBeforeCompression($this->backupFolder);
+		$this->emitBeforeCompression($this->backupFolder, $preset);
 	}
 
 	/**
@@ -124,23 +125,23 @@ class BackupCommandController extends CommandController {
 	 * @return void
 	 * @Flow\Signal
 	 */
-	protected function emitCreateDbBackup($backupPath) {}
+	protected function emitCreateDbBackup($backupPath, $exportName = 'default') {}
 
 	/**
 	 * @return void
 	 * @Flow\Signal
 	 */
-	protected function emitRestoreDbBackup($backupPath) {}
+	protected function emitRestoreDbBackup($backupPath, $exportName = 'default') {}
 
 	/**
 	 * @return void
 	 * @Flow\Signal
 	 */
-	protected function emitBeforeCompression($backupPath) {}
+	protected function emitBeforeCompression($backupPath, $exportName = 'default') {}
 
 	/**
 	 * @return void
 	 * @Flow\Signal
 	 */
-	protected function emitAfterDecompression($backupPath) {}
+	protected function emitAfterDecompression($backupPath, $exportName = 'default') {}
 }

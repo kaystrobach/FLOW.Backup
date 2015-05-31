@@ -48,14 +48,27 @@ class PdoMysqlDriver extends AbtractDriver {
 	}
 
 	protected function buildMySqlDumpCommand($username, $password, $database, $host, $charset, $dumpFilename) {
-		$command = 'mysqldump --user=' . $username . ' --password=' . $password . ' --host=' . $host .
+		$tables = $this->processingSettings['database']['tables'];
+		$ignoreTables = '';
+		$specialCommands = '';
+		if(is_array($tables)) {
+			foreach($tables as $table => $options) {
+				$ignoreTables .= ' --ignore-table=' . $this->settings['dbname'] . '.' . $table . ' ';
+				$specialCommands .= 'MYSQL_PWD=' . $password . ' mysqldump --user=' . $username . ' --host=' . $host .
+					' -c -e --default-character-set=' . $charset .
+					' --single-transaction --skip-set-charset --where="' . $options['mysqldump']['where'] . '" ' . $database . ' ' . $table . ' >> ' . $dumpFilename . ';';
+			}
+		}
+
+		$command = 'MYSQL_PWD=' . $password . ' mysqldump --user=' . $username . ' --host=' . $host .
 			' -c -e --default-character-set=' . $charset .
-			' --single-transaction --skip-set-charset ' . $database . '> ' . $dumpFilename;
-		return $command;
+			' --single-transaction --skip-set-charset ' . $ignoreTables . $database . '> ' . $dumpFilename . ';';
+
+		return $command . $specialCommands;
 	}
 
 	protected function buildMysqlImportCommand($username, $password, $database, $host, $charset, $dumpFilename) {
-		$command = 'mysql --user=' . $username .' --password=' . $password . ' --host=' . $host .
+		$command = 'MYSQL_PWD=' . $password . ' mysql --user=' . $username . ' --host=' . $host .
 			' --default-character-set=' . $charset . '  ' . $database . ' < ' . $dumpFilename;
 		return $command;
 	}
