@@ -6,14 +6,22 @@ namespace KayStrobach\Backup\Command;
  *                                                                        *
  *                                                                        */
 
+use Doctrine\ORM\Query;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Flow\Persistence\Doctrine\Service as DoctrineService;
 use TYPO3\Flow\Cli\CommandController;
 use TYPO3\Flow\Utility\Files;
+
 
 /**
  * @Flow\Scope("singleton")
  */
 class BackupCommandController extends CommandController {
+	/**
+	 * @Flow\Inject
+	 * @var \Doctrine\Common\Persistence\ObjectManager
+	 */
+	protected $entityManager;
 
 	/**
 	 * Folder where Backups will be stored
@@ -119,6 +127,43 @@ class BackupCommandController extends CommandController {
 				$this->outputLine(' - ' . $folder);
 			}
 		}
+	}
+
+	/**
+	 * @param string $table
+	 */
+	public function exampleconfigCommand($table) {
+		/** @var \Doctrine\DBAL\Driver\Statement $result*/
+		/** @var \Doctrine\DBAL\Connection $sqlConnection */
+		$sqlConnection = $this->entityManager->getConnection();
+		$result = $sqlConnection->executeQuery(
+			'
+				SELECT DISTINCT COLUMN_NAME
+				FROM INFORMATION_SCHEMA.COLUMNS
+				WHERE TABLE_NAME = :table AND TABLE_SCHEMA=:database
+			',
+			array(
+				'table' => $table,
+				'database' => $sqlConnection->getDatabase()
+			)
+		);
+
+		$columns = array();
+		foreach($result->fetchAll(Query::HYDRATE_ARRAY) as $column) {
+			$columns[] = $column['COLUMN_NAME'];
+		}
+
+		$this->outputLine('Example configuration for the given table ' . $table . PHP_EOL);
+
+		$output = 'Backup:' . PHP_EOL;
+		$output .= '  default:' . PHP_EOL;
+		$output .= '    database:' . PHP_EOL;
+		$output .= '      tables:' . PHP_EOL;
+		$output .= '        ' . $table . ':' . PHP_EOL;
+		$output .= '          mysqldump:' . PHP_EOL;
+		$output .= '            where: "0=1 UNION SELECT ' . implode(', ', $columns) . ' FROM ' . $table . '"' . PHP_EOL;
+
+		$this->output($output);
 	}
 
 	/**
