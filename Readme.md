@@ -21,6 +21,13 @@ PACKAGE "KAYSTROBACH.BACKUP":
   backup:restore                           restore a backup of your flow
                                            installation
   backup:list                              lists all stored backups
-
+  backup:exampleconfig                     gives you an example config for a
+                                           given table, to help you modifying
+                                           the output
 ```
 
+Additionally you can now create presets for exports, this presets allow you f.e.
+to anonymize date from the database during export.
+
+This allows you to export prodution data to a development system very easy,
+without exposing sensitive production data to all of your developers.
