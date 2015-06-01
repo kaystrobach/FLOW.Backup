@@ -30,6 +30,12 @@ class BackupCommandController extends CommandController {
 	protected $backupFolder = '';
 
 	/**
+	 * Internal name of the backup
+	 * @var string
+	 */
+	protected $backupName = '';
+
+	/**
 	 *
 	 */
 	public function __construct() {
@@ -41,8 +47,9 @@ class BackupCommandController extends CommandController {
 	 */
 	public function setBackupFolder($name = NULL) {
 		if($name === NULL) {
-			$name = date('Ymdhis') . '/';
+			$name = date('Ymdhis');
 		}
+		$this->backupName = $name;
 		if(substr($name, -1, 1) !== '/') {
 			$name = $name . '/';
 		}
@@ -82,6 +89,9 @@ class BackupCommandController extends CommandController {
 			Files::copyDirectoryRecursively(FLOW_PATH_DATA . 'Persistent/', $this->backupFolder . 'Data/Persistent/');
 		}
 		$this->emitBeforeCompression($this->backupFolder, $preset);
+
+		$this->outputFormatted('Created Backup <b>' . $this->backupName . '</b>');
+		$this->outputFormatted('Backup is in Folder: <b>' . $this->backupFolder . '</b>');
 	}
 
 	/**
@@ -142,6 +152,8 @@ class BackupCommandController extends CommandController {
 	}
 
 	/**
+	 * gives you an example config for a given table, to help you modifying the output
+	 *
 	 * @param string $table
 	 */
 	public function exampleconfigCommand($table) {
