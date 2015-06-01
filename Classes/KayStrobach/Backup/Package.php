@@ -28,5 +28,14 @@ class Package extends BasePackage{
 			'KayStrobach\Backup\Command\BackupCommandController', 'restoreDbBackup',
 			'KayStrobach\Backup\Driver\Database\PdoMysqlDriver', 'catchRestoreSignal'
 		);
+
+		//register Configuration Type Menu
+		$dispatcher = $bootstrap->getSignalSlotDispatcher();
+		$dispatcher->connect('TYPO3\Flow\Configuration\ConfigurationManager', 'configurationManagerReady',
+			function ($configurationManager) {
+				$configurationManager->registerConfigurationType('KayStrobach.Backup');
+			}
+		);
+
 	}
 }

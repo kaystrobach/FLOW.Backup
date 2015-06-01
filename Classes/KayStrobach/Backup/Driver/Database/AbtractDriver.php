@@ -19,6 +19,11 @@ abstract class AbtractDriver {
 	protected $settings = array();
 
 	/**
+	 * @var array
+	 */
+	protected $processingSettings = array();
+
+	/**
 	 * @var string
 	 */
 	protected $backupPath = '';
@@ -33,10 +38,13 @@ abstract class AbtractDriver {
 
 	/**
 	 * inits some of the needed internal variables and triggers the backup if needed
+	 *
+	 * @param string $path
+	 * @param string $exportName
 	 */
-	public function catchBackupSignal($path) {
+	public function catchBackupSignal($path, $exportName = 'default') {
 		$this->backupPath = $path;
-		$this->fetchSettings();
+		$this->fetchSettings($exportName);
 		if($this->drivername === $this->settings['driver']) {
 				$this->backup();
 		}
@@ -44,10 +52,13 @@ abstract class AbtractDriver {
 
 	/**
 	 * inits some of the needed internal variables and triggers the restore if needed
+	 *
+	 * @param string $path
+	 * @param string $exportName
 	 */
-	public function catchRestoreSignal($path) {
+	public function catchRestoreSignal($path, $exportName = 'default') {
 		$this->backupPath = $path;
-		$this->fetchSettings();
+		$this->fetchSettings($exportName);
 		if($this->drivername === $this->settings['driver']) {
 			$this->restore();
 		}
@@ -55,11 +66,17 @@ abstract class AbtractDriver {
 
 	/**
 	 * provide the settings needed to configure the driver
+	 *
+	 * @param string $exportName
 	 */
-	protected function fetchSettings() {
+	protected function fetchSettings($exportName = 'default') {
 		$this->settings = $this->configurationManager->getConfiguration(
 			\TYPO3\FLOW\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
 			'TYPO3.Flow.persistence.backendOptions'
+		);
+		$this->processingSettings = $this->configurationManager->getConfiguration(
+			'KayStrobach.Backup',
+			'Backup.' . $exportName
 		);
 	}
 
