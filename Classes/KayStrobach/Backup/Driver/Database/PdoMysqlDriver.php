@@ -53,6 +53,12 @@ class PdoMysqlDriver extends AbtractDriver {
 		$specialCommands = '';
 		if(is_array($tables)) {
 			foreach($tables as $table => $options) {
+                file_put_contents(
+                    $dumpFilename,
+                    PHP_EOL . '-- Export where clause' .
+                        PHP_EOL . '-- ' . $options['mysqldump']['where'] . PHP_EOL . PHP_EOL,
+                    FILE_APPEND
+                );
 				$ignoreTables .= ' --ignore-table=' . $this->settings['dbname'] . '.' . $table . ' ';
 				$specialCommands .= 'MYSQL_PWD=' . $password . ' mysqldump --user=' . $username . ' --host=' . $host .
 					' -c -e --default-character-set=' . $charset .
@@ -67,7 +73,7 @@ class PdoMysqlDriver extends AbtractDriver {
 		return $command . $specialCommands;
 	}
 
-	protected function buildMysqlImportCommand($username, $password, $database, $host, $charset, $dumpFilename) {
+	protected function buildMySqlImportCommand($username, $password, $database, $host, $charset, $dumpFilename) {
 		$command = 'MYSQL_PWD=' . $password . ' mysql --user=' . $username . ' --host=' . $host .
 			' --default-character-set=' . $charset . '  ' . $database . ' < ' . $dumpFilename;
 		return $command;
