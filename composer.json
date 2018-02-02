@@ -2,7 +2,7 @@
     "name": "kaystrobach/backup",
     "type": "typo3-flow-package",
     "description": "Add description here",
-    "license": ["LGPL-3.0+"],
+    "license": ["LGPL-3.0-or-later"],
     "require": {
         "typo3/flow": "*"
     },
