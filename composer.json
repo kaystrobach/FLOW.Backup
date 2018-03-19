@@ -2,7 +2,9 @@
     "name": "kaystrobach/backup",
     "type": "typo3-flow-package",
     "description": "Add description here",
-    "license": ["LGPL-3.0-or-later"],
+    "license": [
+        "LGPL-3.0-or-later"
+    ],
     "require": {
         "typo3/flow": "*"
     },
@@ -10,5 +12,10 @@
         "psr-0": {
             "KayStrobach\\Backup": "Classes"
         }
+    },
+    "extra": {
+        "applied-flow-migrations": [
+            "TYPO3.FLOW3-201201261636"
+        ]
     }
 }
