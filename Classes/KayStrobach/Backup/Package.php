@@ -8,17 +8,17 @@
 
 namespace KayStrobach\Backup;
 
-use TYPO3\Flow\Package\Package as BasePackage;
+use Neos\Flow\Package\Package as BasePackage;
 
 
 class Package extends BasePackage{
 	/**
 	 * Invokes custom PHP code directly after the package manager has been initialized.
 	 *
-	 * @param \TYPO3\Flow\Core\Bootstrap $bootstrap The current bootstrap
+	 * @param \Neos\Flow\Core\Bootstrap $bootstrap The current bootstrap
 	 * @return void
 	 */
-	public function boot(\TYPO3\Flow\Core\Bootstrap $bootstrap) {
+	public function boot(\Neos\Flow\Core\Bootstrap $bootstrap) {
 		$dispatcher = $bootstrap->getSignalSlotDispatcher();
 		$dispatcher->connect(
 			'KayStrobach\Backup\Command\BackupCommandController', 'createDbBackup',
@@ -31,7 +31,7 @@ class Package extends BasePackage{
 
 		//register Configuration Type Menu
 		$dispatcher = $bootstrap->getSignalSlotDispatcher();
-		$dispatcher->connect('TYPO3\Flow\Configuration\ConfigurationManager', 'configurationManagerReady',
+		$dispatcher->connect('Neos\Flow\Configuration\ConfigurationManager', 'configurationManagerReady',
 			function ($configurationManager) {
 				$configurationManager->registerConfigurationType('KayStrobach.Backup');
 			}

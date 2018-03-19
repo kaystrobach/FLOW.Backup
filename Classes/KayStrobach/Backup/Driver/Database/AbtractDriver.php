@@ -2,12 +2,12 @@
 
 namespace KayStrobach\Backup\Driver\Database;
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 abstract class AbtractDriver {
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Configuration\ConfigurationManager
+	 * @var \Neos\Flow\Configuration\ConfigurationManager
 	 */
 	protected $configurationManager;
 
@@ -30,7 +30,7 @@ abstract class AbtractDriver {
 
 	/**
 	 * defines the name on which this driver should react is stored in
-	 * TYPO3.Flow.persistence.backendOptions.driver
+	 * Neos.Flow.persistence.backendOptions.driver
 	 *
 	 * @var string
 	 */
@@ -72,7 +72,7 @@ abstract class AbtractDriver {
 	protected function fetchSettings($exportName = 'default') {
 		$this->settings = $this->configurationManager->getConfiguration(
 			\TYPO3\FLOW\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
-			'TYPO3.Flow.persistence.backendOptions'
+			'Neos.Flow.persistence.backendOptions'
 		);
 		$this->processingSettings = $this->configurationManager->getConfiguration(
 			'KayStrobach.Backup',
