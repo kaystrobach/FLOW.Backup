@@ -10,7 +10,7 @@ use Doctrine\ORM\Query;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\Doctrine\Service as DoctrineService;
 use Neos\Flow\Cli\CommandController;
-use Neos\Flow\Utility\Files;
+use Neos\Utility\Files;
 
 
 /**
