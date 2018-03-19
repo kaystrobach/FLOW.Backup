@@ -1,12 +1,12 @@
 {
     "name": "kaystrobach/backup",
-    "type": "typo3-flow-package",
+    "type": "neos-flow-package",
     "description": "Add description here",
     "license": [
         "LGPL-3.0-or-later"
     ],
     "require": {
-        "typo3/flow": "*"
+        "neos/flow": "*"
     },
     "autoload": {
         "psr-0": {
