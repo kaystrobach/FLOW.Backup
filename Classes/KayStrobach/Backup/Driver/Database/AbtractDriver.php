@@ -71,7 +71,7 @@ abstract class AbtractDriver {
 	 */
 	protected function fetchSettings($exportName = 'default') {
 		$this->settings = $this->configurationManager->getConfiguration(
-			\TYPO3\FLOW\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
+			\Neos\Flow\Configuration\ConfigurationManager::CONFIGURATION_TYPE_SETTINGS,
 			'Neos.Flow.persistence.backendOptions'
 		);
 		$this->processingSettings = $this->configurationManager->getConfiguration(

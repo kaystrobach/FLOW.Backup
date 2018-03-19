@@ -2,7 +2,7 @@
 namespace KayStrobach\Backup\Command;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "KayStrobach.Backup".    *
+ * This script belongs to the Neos Flow package "KayStrobach.Backup".    *
  *                                                                        *
  *                                                                        */
 
@@ -140,12 +140,15 @@ class BackupCommandController extends CommandController {
 		}
 	}
 
+    /**
+     * @return array
+     */
 	protected function getAvailableBackups() {
 		$foundBackups = array();
 		$folders = scandir(FLOW_PATH_DATA . 'Backups/');
 		foreach($folders as $folder) {
 			if(($folder !== '.') && ($folder !== '..') && (is_dir($this->backupFolder . $folder))) {
-				$foundBackups = $folder;
+				$foundBackups[] = $folder;
 			}
 		}
 		return $foundBackups;
