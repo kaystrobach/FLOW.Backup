@@ -12,7 +12,7 @@ namespace KayStrobach\Backup\Driver\Database;
 class PdoMysqlDriver extends AbtractDriver {
 	/**
 	 * defines the name on which this driver should react is stored in
-	 * TYPO3.Flow.persistence.backendOptions.driver
+	 * Neos.Flow.persistence.backendOptions.driver
 	 *
 	 * @var string
 	 */

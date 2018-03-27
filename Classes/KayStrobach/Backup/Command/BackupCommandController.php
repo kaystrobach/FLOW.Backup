@@ -2,15 +2,15 @@
 namespace KayStrobach\Backup\Command;
 
 /*                                                                        *
- * This script belongs to the TYPO3 Flow package "KayStrobach.Backup".    *
+ * This script belongs to the Neos Flow package "KayStrobach.Backup".    *
  *                                                                        *
  *                                                                        */
 
 use Doctrine\ORM\Query;
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Persistence\Doctrine\Service as DoctrineService;
-use TYPO3\Flow\Cli\CommandController;
-use TYPO3\Flow\Utility\Files;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\Doctrine\Service as DoctrineService;
+use Neos\Flow\Cli\CommandController;
+use Neos\Utility\Files;
 
 
 /**
@@ -63,7 +63,7 @@ class BackupCommandController extends CommandController {
 	 * @param bool $settings
 	 * @param bool $composer
 	 * @param string $preset
-	 * @throws \TYPO3\Flow\Utility\Exception
+	 * @throws \Neos\Flow\Utility\Exception
 	 */
 	public function createCommand($database = TRUE, $settings = TRUE, $composer = TRUE, $preset = 'default') {
 		$this->setBackupFolder();
@@ -140,12 +140,15 @@ class BackupCommandController extends CommandController {
 		}
 	}
 
+    /**
+     * @return array
+     */
 	protected function getAvailableBackups() {
 		$foundBackups = array();
 		$folders = scandir(FLOW_PATH_DATA . 'Backups/');
 		foreach($folders as $folder) {
 			if(($folder !== '.') && ($folder !== '..') && (is_dir($this->backupFolder . $folder))) {
-				$foundBackups = $folder;
+				$foundBackups[] = $folder;
 			}
 		}
 		return $foundBackups;

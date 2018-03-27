@@ -1,4 +1,4 @@
-Backup for TYPO3.Flow
+Backup for Neos.Flow
 =====================
 
 This tool allows you to backup the most important files in your FLOW installation.
